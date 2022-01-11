@@ -64,3 +64,10 @@ class ModelManager:
             raise Exception("NOT ENOUGH INFORMATION TO CREATE SAMPLE")
 
 
+    def get_singular_inference_time(self, tm: tl.TimeManager):
+        tm.start_job('singular_inference')
+        
+
+    def get_batch_inference_time(self, tm: tl.TimeManager):
+        tm.start_job('singular_inference')
+
