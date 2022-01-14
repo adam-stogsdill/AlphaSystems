@@ -12,13 +12,13 @@ class TensorInitSetting(Enum):
 
 class ModelManager:
 
-
     #  tf.dtypes.as_dtype("float32") to convert string to tensorflow datatype
     def __init__(self, tensorflow_model: tf.keras.Model, input_shape: tuple, dtype: str):
         self.tf_model = tensorflow_model
         self.input_shape = input_shape
         self.dtype = dtype
         self.sample_input = None
+        self.time_manager = tl.TimeManager()
 
     def create_sample_input(self, setting: TensorInitSetting, batch_size=1):
 
@@ -64,10 +64,10 @@ class ModelManager:
             raise Exception("NOT ENOUGH INFORMATION TO CREATE SAMPLE")
 
 
-    def get_singular_inference_time(self, tm: tl.TimeManager):
-        tm.start_job('singular_inference')
+    def get_singular_inference_time(self):
+        serial = self.time_manager.start_job('singular_inference')
         
 
-    def get_batch_inference_time(self, tm: tl.TimeManager):
-        tm.start_job('singular_inference')
+    def get_batch_inference_time(self):
+        serial = self.time_manager.start_job('batch_inference')
 
