@@ -17,7 +17,8 @@ class ModelManager:
         self.tf_model = tensorflow_model
         self.input_shape = input_shape
         self.dtype = dtype
-        self.sample_input = None
+        self.single_sample_input = None
+        self.batch_sample_input = None
         self.time_manager = tl.TimeManager()
 
     def create_sample_input(self, setting: TensorInitSetting, batch_size=1):
@@ -65,9 +66,14 @@ class ModelManager:
 
 
     def get_singular_inference_time(self):
+        if self.single_sample_input == None:
+            raise Exception("THERE IS AN ABSENSE OF A SINGLE EXAMPLE; PLEASE COMPILE")
         serial = self.time_manager.start_job('singular_inference')
-        
 
     def get_batch_inference_time(self):
+        if self.single_sample_input == None:
+            raise Exception("THERE IS AN ABSENSE OF A BATCH EXAMPLE; PLEASE COMPILE")
         serial = self.time_manager.start_job('batch_inference')
+        
+    
 

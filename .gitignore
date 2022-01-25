@@ -3,3 +3,4 @@ __pycache__
 test*
 playground.ipynb
 data_information.txt
+server_document.json

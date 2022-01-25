@@ -3,6 +3,8 @@ import pyodbc
 import json
 from azure.storage.blob import BlobServiceClient, ContainerClient, __version__
 from azure.storage.blob.aio import BlobClient
+import mysql.connector
+from mysql.connector import errorcode
 
 __container_name__ = None
 __connection_str__ = None
@@ -15,15 +17,6 @@ class DatabaseHandler:
         self.connect(json_file_location=json_file_location)
     
     def connect(self, json_file_location: str):
-        '''
-        connect to the db, open a buffered cursor
-        
-        Returns
-        -------
-        bool
-            Tells user if funtion connected to DB successfully
-        '''
-
         
         api_information = json.load(json_file_location)
 
@@ -40,19 +33,17 @@ class DatabaseHandler:
             cursor = conn.cursor()
             return True
 
-        except Error as e:
-            print(e)
-            return False
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("INVALID USERNAME AND/OR PASSWORD")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                print(f"{database} DOES NOT EXIST")
+            else:
+                print(err)
+    
+    def get_table(self, table_name)
         
     def close(self):
-        '''
-        Closes DB connection
-        
-        Returns
-        -------
-        None.
-        '''
-        
         self.conn.close()
         
     def download(self, blob_url: str, download_file_location: str, download_file_name: str):
